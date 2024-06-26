@@ -1,5 +1,4 @@
 import React from 'react'
-import { Outlet } from 'react-router-dom'
 
 interface DefaultLayoutProps {
     children?: React.ReactElement
@@ -8,8 +7,7 @@ interface DefaultLayoutProps {
 const DefaultLayout = ({ children }: DefaultLayoutProps) => {
     return (
         <div>
-            DefaultLayout
-            <div>{children ?? <Outlet />}</div>
+            <div>{children}</div>
         </div>
     )
 }
