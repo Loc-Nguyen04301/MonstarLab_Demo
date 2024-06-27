@@ -3,12 +3,13 @@ import { RouteItemDef } from "../../../types/routes.type";
 import { AuthPathsEnum } from "../constants/auth.paths";
 
 const AuthLayout = React.lazy(() => import("../layouts/AuthLayout/AuthLayout"))
+const SignInScreen = React.lazy(() => import("../screens/SignInScreen/SignInScreen"))
 
 const SIGN_IN_SCREEN: RouteItemDef = {
     id: "auth",
     path: AuthPathsEnum.SIGN_IN,
     layout: AuthLayout,
-    component: React.lazy(() => import("../screens/SignInScreen/SignInScreen")),
+    component: SignInScreen,
     isAuthRoute: true,
 };
 

@@ -1,6 +1,6 @@
 import { BrowserRouter as Router } from 'react-router-dom';
 import Routes from './routes/Routes';
-import { getBaseUrl } from '@/api';
+import Loader from '@/components/Loader/Loader';
 
 function App() {
   return (

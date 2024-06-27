@@ -2,8 +2,9 @@ import { FC, memo, Suspense } from "react"
 import { Redirect, Route, Switch } from "react-router-dom";
 import { AUTH_ROUTE, ROOT_ROUTE, ROUTE_LIST } from "./routes.config";
 import { RouteItemDef } from "@/types/routes.type";
-import DefaultLayout from "@/layouts/DefaultLayout";
 import { useAppSelector } from "@/redux-toolkit/hook";
+import Loader from "@/components/Loader/Loader";
+import MainLayout from "@/layouts/MainLayout";
 
 const RouteWrapper: FC<RouteItemDef> = ({
     component: Component,
@@ -13,7 +14,7 @@ const RouteWrapper: FC<RouteItemDef> = ({
     ...prop
 }) => {
     console.log({ path, prop })
-    const RouteLayout = layout || DefaultLayout
+    const RouteLayout = layout || MainLayout
     const { accessToken } = useAppSelector((state) => state.auth)
     if (!accessToken && !isAuthRoute) {
         return <Redirect to={AUTH_ROUTE} />;
@@ -40,7 +41,7 @@ const RouteWrapper: FC<RouteItemDef> = ({
 
 const Routes: React.FC = () => {
     return (
-        <Suspense fallback>
+        <Suspense fallback={<Loader isFullScreen />}>
             <Switch>
                 {ROUTE_LIST.map((route, id, arr) => {
                     console.log(route.path, arr)

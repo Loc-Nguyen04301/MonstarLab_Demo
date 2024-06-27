@@ -3,7 +3,6 @@ import type { FormProps } from 'antd';
 import { Button, Checkbox, Form, Input, Typography } from 'antd';
 import { useAppDispatch } from '@/redux-toolkit/hook';
 import { loginIn } from '@/features/auth/redux/auth.slice';
-import { getBaseUrl } from '@/api';
 
 const { Title, Text } = Typography;
 
@@ -14,7 +13,6 @@ type FieldType = {
 };
 
 const SignInScreen = () => {
-
     const dispatch = useAppDispatch()
 
     const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
