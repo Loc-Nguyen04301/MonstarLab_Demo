@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { useAppDispatch, useAppSelector } from '../../redux/hook'
-import { decrement, increment } from '../../redux/counterSlice'
+import { useAppDispatch, useAppSelector } from '../../redux-toolkit/hook'
+import { decrement, increment } from '../../redux-toolkit/counterSlice'
 import { Button } from 'antd'
 
 export function Counter() {

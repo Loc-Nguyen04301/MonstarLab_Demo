@@ -1,14 +1,17 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 
-const getBaseUrl = () => {
-    return import.meta.env.API_URL
+export const getBaseUrl = () => {
+    return import.meta.env.VITE_API_URL
 }
 
-const instance: AxiosInstance = axios.create({
-    baseURL: getBaseUrl()
+const api: AxiosInstance = axios.create({
+    baseURL: getBaseUrl(),
+    headers: {
+        "Content-Type": "application/json"
+    }
 })
 
-instance.interceptors.request.use(
+api.interceptors.request.use(
     (request: InternalAxiosRequestConfig) => {
         request.headers['Content-Type'] = 'application/json'
         return request
@@ -18,16 +21,21 @@ instance.interceptors.request.use(
     }
 )
 
-instance.interceptors.response.use(
+api.interceptors.response.use(
     (response: AxiosResponse) => {
         return response
     },
     (error: AxiosError) => {
         // const originalRequest = error.config
-        if (error.response?.status === 401) {
+        if (error.response && error.response.status === 401) {
             return Promise.reject(error)
+        }
+        if (error.response && error.response.status !== 401) {
+            return Promise.reject(error.response.data)
         }
 
         return Promise.reject(error)
     }
 )
+
+export default api

@@ -1,5 +1,5 @@
-import { HOME_ROUTES } from "../features/home/home";
-import { AUTH_ROUTES } from "../features/auth/auth"
+import { HOME_ROUTES } from "@/features/home/home";
+import { AUTH_ROUTES } from "@/features/auth/auth"
 
 export const ROOT_ROUTE = "/";
 export const AUTH_ROUTE = "/sign-in";

@@ -1,9 +1,9 @@
 import { FC, memo, Suspense } from "react"
 import { Redirect, Route, Switch } from "react-router-dom";
 import { AUTH_ROUTE, ROOT_ROUTE, ROUTE_LIST } from "./routes.config";
-import { RouteItemDef } from "../types/routes.type";
-import DefaultLayout from "../layouts/DefaultLayout";
-import { useAppSelector } from "../redux/hook";
+import { RouteItemDef } from "@/types/routes.type";
+import DefaultLayout from "@/layouts/DefaultLayout";
+import { useAppSelector } from "@/redux-toolkit/hook";
 
 const RouteWrapper: FC<RouteItemDef> = ({
     component: Component,
