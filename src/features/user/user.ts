@@ -1,1 +1,0 @@
-export { USER_ROUTES } from "@/features/user/routes/user.routes";

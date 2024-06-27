@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 const HomeScreen = () => {
     return (
         <div>
-            HoneScreen
+            HomeScreen
         </div>
     )
 }

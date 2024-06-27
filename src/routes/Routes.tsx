@@ -1,55 +1,51 @@
 import { FC, memo, Suspense } from "react"
-import { Redirect, Route, Switch } from "react-router-dom";
-import { AUTH_ROUTE, ROOT_ROUTE, ROUTE_LIST } from "./routes.config";
-import { RouteItemDef } from "@/types/routes.type";
-import { useAppSelector } from "@/redux-toolkit/hook";
+import { Route, useLocation, useRoutes } from "react-router-dom";
 import Loader from "@/components/Loader/Loader";
 import MainLayout from "@/layouts/MainLayout";
-
-const RouteWrapper: FC<RouteItemDef> = ({
-    component: Component,
-    layout,
-    path,
-    isAuthRoute,
-    ...prop
-}) => {
-    console.log({ path, prop })
-    const RouteLayout = layout || MainLayout
-    const { accessToken } = useAppSelector((state) => state.auth)
-    if (!accessToken && !isAuthRoute) {
-        return <Redirect to={AUTH_ROUTE} />;
-    }
-
-    if (accessToken && isAuthRoute) {
-        return <Redirect to={ROOT_ROUTE} />;
-    }
-
-    return (
-        <Route
-            exact={true}
-            path={path}
-            render={(props): React.ReactElement => {
-                return (
-                    <RouteLayout>
-                        <Component {...props} />
-                    </RouteLayout>
-                )
-            }}
-        />
-    )
-}
+import HomeScreen from "@/features/home/screen/HomeScreen/HomeScreen";
+import UserScreen from "@/features/user/screen/UserScreen/UserScreen";
+import { HomePathsEnum } from "@/features/home/constants/home.paths";
+import { UserPathsEnum } from "@/features/user/constants/user.paths";
+import AuthLayout from "@/features/auth/layouts/AuthLayout/AuthLayout";
+import SignInScreen from "@/features/auth/screens/SignInScreen/SignInScreen";
+import { AuthPathsEnum } from "@/features/auth/constants/auth.paths";
+import AuthGuard from "@/guard/AuthGuard";
+import GuestGuard from "@/guard/GuestGuard";
 
 const Routes: React.FC = () => {
+
+    const routes = useRoutes([
+        {
+            path: HomePathsEnum.HOME,
+            element:
+                <AuthGuard>
+                    <MainLayout>
+                        <HomeScreen />
+                    </MainLayout>
+                </AuthGuard>
+        },
+        {
+            path: UserPathsEnum.USER,
+            element:
+                <AuthGuard>
+                    <MainLayout>
+                        <UserScreen />
+                    </MainLayout>
+                </AuthGuard >
+        },
+        {
+            path: AuthPathsEnum.SIGN_IN,
+            element:
+                <GuestGuard>
+                    <AuthLayout>
+                        <SignInScreen />
+                    </AuthLayout>
+                </GuestGuard>
+        }
+    ])
     return (
         <Suspense fallback={<Loader isFullScreen />}>
-            <Switch>
-                {ROUTE_LIST.map((route, id, arr) => {
-                    console.log(route.path, arr)
-                    return (
-                        <RouteWrapper key={route.id} {...route} />
-                    )
-                })}
-            </Switch>
+            {routes}
         </Suspense>
     )
 };

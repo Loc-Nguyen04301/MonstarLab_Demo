@@ -6,7 +6,7 @@ import {
     HomeOutlined
 } from '@ant-design/icons';
 import { Button, Layout, Menu, MenuProps, theme } from 'antd';
-import { useHistory, useLocation } from "react-router-dom"
+import { Outlet, useLocation, useNavigate } from "react-router-dom"
 import { HomePathsEnum } from '@/features/home/constants/home.paths';
 import { UserPathsEnum } from '@/features/user/constants/user.paths';
 const { Header, Sider, Content } = Layout;
@@ -17,10 +17,11 @@ interface MainLayoutProps {
 }
 
 const MainLayout = ({ children }: MainLayoutProps) => {
+    const location = useLocation()
     const [selectedKeys, setSelectedKeys] = useState<string>(HomePathsEnum.HOME)
     const [collapsed, setCollapsed] = useState(false)
-    const history = useHistory()
-
+    const navigate = useNavigate();
+    
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
@@ -39,12 +40,13 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     ]
 
     const onClick: MenuProps['onClick'] = (e) => {
-        setSelectedKeys(e.key);
+        navigate(e.key)
     };
 
     useEffect(() => {
-        history.push(selectedKeys)
-    }, [selectedKeys]);
+        const pathName = location.pathname;
+        setSelectedKeys(pathName);
+    }, [location.pathname]);
 
     return (
         <div className='w-full h-full'>
@@ -56,7 +58,6 @@ const MainLayout = ({ children }: MainLayoutProps) => {
                         items={items}
                         onClick={onClick}
                         selectedKeys={[selectedKeys]}
-                    // defaultOpenKeys={['sub1']}
                     />
                 </Sider>
                 <Layout>
@@ -81,7 +82,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
                             borderRadius: borderRadiusLG,
                         }}
                     >
-                        {children}
+                        {children ?? <Outlet />}
                     </Content>
                 </Layout>
             </Layout>
