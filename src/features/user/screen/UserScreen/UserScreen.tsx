@@ -1,21 +1,10 @@
-import { Space, TableProps } from 'antd'
+import { Space, Table, TableProps } from 'antd'
 import React, { useEffect, useState } from 'react'
+import { User } from "@features/user/types/user.types"
+import { useAppDispatch } from '@/redux-toolkit/hook'
+import { fetchListUsers } from '@/features/user/redux/user.slice'
 
-interface DataType {
-    id: number
-    email: string
-    name: {
-        firstname: string,
-        lastname: string
-    }
-    address: {
-        city: string
-        street: string
-    }
-    phone: string
-}
-
-const columns: TableProps<DataType>['columns'] = [
+const columns: TableProps<User>['columns'] = [
     {
         title: 'ID',
         dataIndex: 'id',
@@ -32,13 +21,19 @@ const columns: TableProps<DataType>['columns'] = [
         title: 'Name',
         dataIndex: 'name',
         key: 'name',
-        render: (text, record) => <a>{record.name.firstname + record.name.lastname}</a>,
+        render: (text, record) => <a>{record.name.firstname + " " + record.name.lastname}</a>,
     },
     {
         title: 'Address',
         dataIndex: 'address',
         key: 'address',
-        render: (text, record) => <a>{record.address.city + record.address.street}</a>,
+        render: (text, record) => <a>{record.address.city + " " + record.address.street}</a>,
+    },
+    {
+        title: 'Phone number',
+        dataIndex: 'phone',
+        key: 'phone',
+        render: (text, record) => <a>{record.phone}</a>,
     },
     {
         title: 'Action',
@@ -53,14 +48,27 @@ const columns: TableProps<DataType>['columns'] = [
 ]
 
 const UserScreen = () => {
-    const [dataSource, setDataSource] = useState<DataType[]>([])
+    const [dataSource, setDataSource] = useState<User[]>([])
 
-    // useEffect(() => {
-    //     setDataSource()
-    // }, [])
+    const dispatch = useAppDispatch()
+    useEffect(() => {
+        dispatch(fetchListUsers())
+            .then((res) => {
+                console.log(res)
+                setDataSource(res.payload)
+            })
+            .catch((e: any) => {
+                console.log(e)
+            })
+    }, [])
 
     return (
-        <div>UserScreen</div>
+        <div>
+            <Table
+                columns={columns}
+                dataSource={dataSource}
+            />
+        </div>
     )
 }
 
