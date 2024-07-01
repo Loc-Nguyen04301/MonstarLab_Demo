@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { User } from "@features/user/types/user.types"
 import { useAppDispatch } from '@/redux-toolkit/hook'
 import { fetchListUsers } from '@/features/user/redux/user.slice'
+import { setLoading } from '@/redux-toolkit/stateSlice'
 
 const columns: TableProps<User>['columns'] = [
     {
@@ -52,9 +53,10 @@ const UserScreen = () => {
 
     const dispatch = useAppDispatch()
     useEffect(() => {
+        dispatch(setLoading(true))
         dispatch(fetchListUsers())
             .then((res) => {
-                console.log(res)
+                dispatch(setLoading(false))
                 setDataSource(res.payload)
             })
             .catch((e: any) => {
@@ -67,6 +69,7 @@ const UserScreen = () => {
             <Table
                 columns={columns}
                 dataSource={dataSource}
+                rowKey={(record) => record.id}
             />
         </div>
     )
